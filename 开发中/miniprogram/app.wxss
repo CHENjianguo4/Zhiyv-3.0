@@ -1,0 +1,116 @@
+/** app.wxss **/
+page {
+  --bg: #0f131a;
+  --card: #151a22;
+  --muted: #8b95a7;
+  --text: #e9edf5;
+  --primary: #5e8bff;
+  --primary-2: #7aa3ff;
+  --accent: #7ef0c6;
+  --danger: #ff6b6b;
+  --warning: #ffcf5c;
+  --success: #5cd29d;
+  
+  background: radial-gradient(1200px 800px at 80% -20%, #1b2230 0%, #0f131a 45%, #0d1117 100%);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", "Hiragino Sans GB", Arial, sans-serif;
+  box-sizing: border-box;
+}
+
+view, text, image, navigator {
+  box-sizing: border-box;
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  box-sizing: border-box;
+} 
+
+/* Reset button styles */
+button {
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  line-height: inherit;
+  border-radius: 0;
+  font-size: inherit;
+  color: inherit;
+}
+button::after {
+  border: none;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  color: #0d1117;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  font-size: 14px;
+  font-weight: 500;
+  min-width: 0; /* fix flex item width */
+}
+.btn.secondary {
+  color: var(--text);
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.12);
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  background: rgba(0,0,0,.6);
+  backdrop-filter: blur(6px);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal.show {
+  display: flex;
+}
+.modal-sheet {
+  width: 100%;
+  max-width: 420px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(30,35,48,.9), rgba(20,24,34,.95));
+  border: 1px solid rgba(255,255,255,.1);
+  box-shadow: 0 30px 60px rgba(0,0,0,.5);
+  overflow: hidden;
+}
+.sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.sheet-body {
+  padding: 16px;
+}
+.form {
+  display: grid;
+  gap: 12px;
+}
+.input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  outline: none;
+}
+.hint {
+  font-size: 13px;
+  color: var(--muted);
+}

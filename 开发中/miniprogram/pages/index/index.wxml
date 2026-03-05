@@ -1,0 +1,692 @@
+<!--index.wxml-->
+<view class="app theme-{{theme}} text-{{textSize}}">
+  <!-- 自定义导航栏 -->
+  <view class="header" style="height: {{totalHeaderHeight}}px;">
+    <view style="height: {{statusBarHeight}}px;"></view> <!-- 状态栏占位 -->
+    <view class="header-inner" style="height: {{navBarHeight}}px; padding-right: {{menuButtonWidth + 12}}px;">
+      <view class="brand">
+        <view class="brand-logo"></view>
+        <text class="brand-text">知域校园</text>
+      </view>
+      <view class="header-actions">
+         <view class="action-btn" bindtap="openLogin" wx:if="{{!authed}}">微信授权</view>
+         <view class="action-btn" bindtap="openPost">发布</view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{netStatus === 'weak'}}" class="banner" style="top: {{totalHeaderHeight}}px;">网络较弱，已降级展示内容</view>
+
+  <scroll-view scroll-y class="content" style="padding-top: {{totalHeaderHeight}}px; height: 100vh;" enable-back-to-top>
+    <!-- Home / Circles -->
+    <view wx:if="{{activeTab === 'home'}}">
+      <scroll-view scroll-x class="chips-scroll" enable-flex>
+        <view class="chips">
+          <view class="chip {{activeCategory === '全部' ? 'active' : ''}}" data-cat="全部" bindtap="selectCategory">全部</view>
+          <view class="chip {{activeCategory === '学习互助' ? 'active' : ''}}" data-cat="学习互助" bindtap="selectCategory">学习互助</view>
+          <view class="chip {{activeCategory === '娱乐休闲' ? 'active' : ''}}" data-cat="娱乐休闲" bindtap="selectCategory">娱乐休闲</view>
+          <view class="chip {{activeCategory === '兴趣爱好' ? 'active' : ''}}" data-cat="兴趣爱好" bindtap="selectCategory">兴趣爱好</view>
+          <view class="chip {{activeCategory === '竞赛科研' ? 'active' : ''}}" data-cat="竞赛科研" bindtap="selectCategory">竞赛科研</view>
+        </view>
+      </scroll-view>
+
+      <view class="toolbar">
+        <view class="tool-btn" bindtap="openRunner">校园跑腿</view>
+        <view class="tool-btn" bindtap="openMap">校园地图</view>
+        <view class="tool-btn" bindtap="openRecruit">搭子招募</view>
+      </view>
+
+      <view class="section-search section-search-under">
+        <icon type="search" size="13" color="rgba(255,255,255,0.55)" />
+        <input class="section-search-input" placeholder="搜索圈子内容" value="{{circleSearchKeyword}}" bindinput="onCircleSearchInput" />
+      </view>
+
+      <view class="grid">
+        <block wx:for="{{filteredPosts}}" wx:key="id">
+          <view class="card">
+            <view class="card-row">
+              <view class="avatar avatar-{{item.avatarColor}}"></view>
+              <view class="user-info">
+                <view class="user-name">{{item.name}}</view>
+                <view class="post-meta">{{item.time}}</view>
+              </view>
+            </view>
+            <view class="post-text">{{item.content}}</view>
+            <view class="media" wx:if="{{item.img}}"><image src="{{item.img}}" mode="widthFix"></image></view>
+            <view class="card-actions">
+              <view class="action-btn-card" bindtap="openDetail" data-id="{{item.id}}" data-type="post" data-title="{{item.content}}">详情</view>
+              <view class="action-btn-card {{item.liked ? 'active' : ''}}" bindtap="likePost" data-id="{{item.id}}">{{item.liked ? '已赞' : '点赞'}} {{item.likes}}</view>
+              <view class="action-btn-card" bindtap="openComments" data-id="{{item.id}}" data-title="{{item.category}}">评论 {{item.comments}}</view>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+
+    <!-- Market -->
+    <view wx:if="{{activeTab === 'market'}}">
+      <view class="section-header">
+        <view class="section-badge">二手集市</view>
+        <view class="pill-btn">同校交易</view>
+      </view>
+      <view class="nav" style="display:flex; gap:10px; margin-bottom:10px">
+        <button class="tool-btn" style="flex:1" bindtap="openGoods">发布商品</button>
+        <button class="tool-btn" style="flex:1" bindtap="openOrderIntent">意向发布</button>
+      </view>
+      <view class="list">
+        <block wx:for="{{marketItems}}" wx:key="id">
+          <view class="list-item" bindtap="openDetail" data-id="{{item.id}}" data-title="{{item.title}}" data-type="market" data-contact="{{item.owner}}">
+            <view class="thumb" style="{{item.color ? 'background:'+item.color : ''}}"></view>
+            <view class="item-info">
+              <view class="item-title">{{item.title}}</view>
+                  <view class="item-sub">{{item.sub}}</view>
+                  <view class="item-sub" wx:if="{{item.desc}}">{{item.desc}}</view>
+            </view>
+                <image class="thumb-mini" wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFill"></image>
+            <view class="price">¥{{item.price}}</view>
+          </view>
+        </block>
+        <block wx:for="{{orderIntents}}" wx:key="id">
+          <view class="list-item" bindtap="openDetail" data-type="intent" data-id="{{item.id}}" data-title="求购：{{item.item}}" data-contact="{{item.owner}}">
+            <view class="thumb"></view>
+            <view class="item-info">
+              <view class="item-title">意向：{{item.item}}</view>
+              <view class="item-sub">预算：{{item.budget}}</view>
+              <view class="item-sub">{{item.desc}}</view>
+            </view>
+            <view class="tag">求购</view>
+          </view>
+        </block>
+      </view>
+    </view>
+    
+    <!-- Course / Rating -->
+    <view wx:if="{{activeTab === 'course'}}">
+        <view class="section-header">
+          <view class="section-badge">评分模块</view>
+        </view>
+        <view class="nav" style="display:flex; gap:10px; margin-bottom:10px">
+          <button class="tool-btn" style="flex:1" bindtap="openRatingRequest">发起评分</button>
+        </view>
+        
+        <scroll-view scroll-x class="chips-scroll" enable-flex>
+            <view class="chips">
+                <view class="chip {{activeRatingTag === '全部' ? 'active' : ''}}" data-tag="全部" bindtap="selectRatingCategory">全部</view>
+                <view class="chip {{activeRatingTag === '老师' ? 'active' : ''}}" data-tag="老师" bindtap="selectRatingCategory">老师</view>
+                <view class="chip {{activeRatingTag === '课程' ? 'active' : ''}}" data-tag="课程" bindtap="selectRatingCategory">课程</view>
+                <view class="chip {{activeRatingTag === '资料' ? 'active' : ''}}" data-tag="资料" bindtap="selectRatingCategory">资料</view>
+                <view class="chip {{activeRatingTag === '商铺' ? 'active' : ''}}" data-tag="商铺" bindtap="selectRatingCategory">商铺</view>
+                <view class="chip {{activeRatingTag === '食堂' ? 'active' : ''}}" data-tag="食堂" bindtap="selectRatingCategory">食堂</view>
+            </view>
+        </scroll-view>
+
+        <view class="list">
+            <block wx:for="{{filteredRatingItems}}" wx:key="id">
+              <view class="list-item" bindtap="openDetail" data-type="rating" data-rating-id="{{item.id}}" data-title="{{item.title}}">
+                  <view class="thumb" style="{{item.color ? 'background:'+item.color : ''}}"></view>
+                  <view class="item-info">
+                      <view class="item-title">{{item.title}}</view>
+                      <view class="item-sub" style="color:var(--accent)">评分 {{item.score}}</view>
+                  <view class="item-sub">{{item.sub}}</view>
+                  <view class="item-sub">评价 {{item.reviewCount}} 条</view>
+                  </view>
+                  <view class="tag">{{item.tag}}</view>
+              </view>
+            </block>
+            <block wx:for="{{ratingLogs}}" wx:key="id">
+              <view class="list-item">
+                <view class="thumb"></view>
+                <view class="item-info">
+                  <view class="item-title">{{item.title}}</view>
+                  <view class="item-sub">我的评分：{{item.stars}}</view>
+                  <view class="item-sub">{{item.text}}</view>
+                </view>
+                <view class="tag">我的评价</view>
+              </view>
+            </block>
+        </view>
+    </view>
+
+    <!-- Chat -->
+    <view wx:if="{{activeTab === 'chat'}}">
+        <view class="section-header">
+          <view class="section-badge">消息</view>
+        </view>
+        <scroll-view scroll-x class="chips-scroll" enable-flex>
+          <view class="chips">
+            <view class="chip {{chatFilter === '全部' ? 'active' : ''}}" data-filter="全部" bindtap="selectChatFilter">全部</view>
+            <view class="chip {{chatFilter === '圈子' ? 'active' : ''}}" data-filter="圈子" bindtap="selectChatFilter">圈子</view>
+            <view class="chip {{chatFilter === '集市' ? 'active' : ''}}" data-filter="集市" bindtap="selectChatFilter">集市</view>
+            <view class="chip {{chatFilter === '评分' ? 'active' : ''}}" data-filter="评分" bindtap="selectChatFilter">评分</view>
+            <view class="chip {{chatFilter === '群聊' ? 'active' : ''}}" data-filter="群聊" bindtap="selectChatFilter">群聊</view>
+          </view>
+        </scroll-view>
+        <view class="nav" style="display:flex; gap:10px; margin-bottom:10px">
+          <button class="tool-btn" style="flex:1" bindtap="openGroup">创建群聊</button>
+          <button class="tool-btn" style="flex:1" bindtap="openSettings">通知设置</button>
+        </view>
+        <view class="list">
+            <block wx:for="{{filteredChatItems}}" wx:key="id">
+              <view class="list-item" bindtap="openRoom" data-id="{{item.id}}" data-name="{{item.name}}">
+                  <view class="thumb" style="{{item.color ? 'background:'+item.color : ''}}">
+                    <image wx:if="{{item.avatarImage}}" class="thumb-cover" src="{{item.avatarImage}}" mode="aspectFill"></image>
+                  </view>
+                  <view class="item-info">
+                      <view class="item-title">{{item.name}}</view>
+                      <view class="item-sub">{{item.msg}}</view>
+                    <view class="item-sub">{{item.source}} · {{item.roomType}}</view>
+                  </view>
+                  <view class="tag">{{item.tag}}</view>
+              </view>
+            </block>
+        </view>
+    </view>
+
+    <!-- Profile -->
+    <view wx:if="{{activeTab === 'profile'}}" class="profile-wrap">
+        <view class="card profile-card">
+            <view class="card-row">
+              <view class="avatar avatar-profile"></view>
+              <view class="user-info">
+                <view class="user-name">{{userInfo.nickName || '未登录用户'}}</view>
+                <view class="post-meta profile-meta-line">
+                  <text>{{authed ? '已认证' : '未认证 · 限制发布交易评分'}}</text>
+                  <text class="school-inline">{{school || '未选择'}}</text>
+                </view>
+              </view>
+            </view>
+            <view style="display:flex; gap:10px; margin-top:12px;">
+                <button class="tool-btn" style="flex:1" bindtap="openAuth">校园身份认证</button>
+                <button class="tool-btn" style="flex:1" bindtap="toggleTheme">夜间模式</button>
+            </view>
+             <view style="display:flex; gap:10px; margin-top:10px;">
+                <button class="tool-btn" style="flex:1" bindtap="openMyPosts">我的发布</button>
+                <button class="tool-btn" style="flex:1" bindtap="openSettings">设置</button>
+            </view>
+            <view style="display:flex; gap:10px; margin-top:10px;">
+                <button class="tool-btn" style="flex:1" bindtap="openSchool">切换学校</button>
+                <button class="tool-btn" style="flex:1" bindtap="openFaq">FAQ/客服</button>
+            </view>
+            <view class="card-row" style="margin-top:10px; justify-content:space-between">
+              <view class="counter"><view class="tag">积分等级</view><view class="level">积分 {{points}} · Lv1</view></view>
+              <view class="counter"><view class="tag">当前学校</view><view class="level">{{school || '未选择'}}</view></view>
+            </view>
+            <view style="margin-top:10px;">
+              <view class="post-meta">文字大小</view>
+              <view class="size-actions">
+                <view class="size-chip {{textSize === 'small' ? 'active' : ''}}" data-size="small" bindtap="setTextSize">小</view>
+                <view class="size-chip {{textSize === 'medium' ? 'active' : ''}}" data-size="medium" bindtap="setTextSize">中</view>
+                <view class="size-chip {{textSize === 'large' ? 'active' : ''}}" data-size="large" bindtap="setTextSize">大</view>
+              </view>
+            </view>
+            <view style="margin-top:12px;">
+              <view class="post-meta">个性化推荐标签</view>
+              <view class="interest-list">
+                <block wx:for="{{interests}}" wx:key="*this">
+                  <view class="interest-chip {{selectedInterests.indexOf(item) > -1 ? 'active' : ''}}" data-tag="{{item}}" bindtap="toggleInterest">{{item}}</view>
+                </block>
+              </view>
+              <view class="interest-list">
+                <block wx:for="{{selectedInterests}}" wx:key="*this">
+                  <view class="interest-chip active" data-tag="{{item}}" bindtap="removeInterest">{{item}} ×</view>
+                </block>
+              </view>
+              <view class="interest-editor">
+                <input class="input" placeholder="新增个性化标签" value="{{customInterestInput}}" bindinput="onCustomInterestInput" />
+                <view class="btn secondary" bindtap="addCustomInterest">添加</view>
+              </view>
+            </view>
+        </view>
+    </view>
+
+    <view style="height: 40rpx;"></view> <!-- Bottom Spacer -->
+  </scroll-view>
+
+  <!-- Tab Bar -->
+  <view class="tabs">
+    <view class="tabs-inner">
+      <view class="tab {{activeTab === 'home' ? 'active' : ''}}" bindtap="switchTab" data-tab="home">
+        <image class="tab-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjOGI5NWE3IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTMgOWw5LTcgOSA3djExYTIgMiAwIDAgMS0yIDJINWEyIDIgMCAwIDEtMi0yeiI+PC9wYXRoPjxwb2x5bGluZSBwb2ludHM9IjkgMjIgOSAxMiAxNSAxMiAxNSAyMiI+PC9wb2x5bGluZT48L3N2Zz4=" wx:if="{{activeTab !== 'home'}}"></image>
+        <image class="tab-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTllZGY1IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTMgOWw5LTcgOSA3djExYTIgMiAwIDAgMS0yIDJINWEyIDIgMCAwIDEtMi0yeiI+PC9wYXRoPjxwb2x5bGluZSBwb2ludHM9IjkgMjIgOSAxMiAxNSAxMiAxNSAyMiI+PC9wb2x5bGluZT48L3N2Zz4=" wx:else></image>
+        <view>圈子</view>
+      </view>
+      <view class="tab {{activeTab === 'market' ? 'active' : ''}}" bindtap="switchTab" data-tab="market">
+        <view class="tab-glyph {{activeTab === 'market' ? 'active' : ''}}">🛍️</view>
+        <view>集市</view>
+      </view>
+      <view class="tab {{activeTab === 'course' ? 'active' : ''}}" bindtap="switchTab" data-tab="course">
+        <image class="tab-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjOGI5NWE3IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBvbHlnb24gcG9pbnRzPSIxMiAyIDE1LjA5IDguMjYgMjIgOS4yNyAxNyAxNC4xNCAxOC4xOCAyMS4wMiAxMiAxNy43NyA1LjgyIDIxLjAyIDcgMTQuMTQgMiA5LjI3IDguOTEgOC4yNiAxMiAyIj48L3BvbHlnb24+PC9zdmc+" wx:if="{{activeTab !== 'course'}}"></image>
+        <image class="tab-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTllZGY1IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBvbHlnb24gcG9pbnRzPSIxMiAyIDE1LjA5IDguMjYgMjIgOS4yNyAxNyAxNC4xNCAxOC4xOCAyMS4wMiAxMiAxNy43NyA1LjgyIDIxLjAyIDcgMTQuMTQgMiA5LjI3IDguOTEgOC4yNiAxMiAyIj48L3BvbHlnb24+PC9zdmc+" wx:else></image>
+        <view>评分</view>
+      </view>
+      <view class="tab {{activeTab === 'chat' ? 'active' : ''}}" bindtap="switchTab" data-tab="chat">
+        <view class="tab-glyph {{activeTab === 'chat' ? 'active' : ''}}">💬</view>
+        <view class="tab-badge" wx:if="{{unreadCount > 0}}">{{unreadCount > 99 ? '99+' : unreadCount}}</view>
+        <view>消息</view>
+      </view>
+      <view class="tab {{activeTab === 'profile' ? 'active' : ''}}" bindtap="switchTab" data-tab="profile">
+        <image class="tab-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjOGI5NWE3IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTIwIDIxdjFhMiAyIDAgMCAxLTIgMmgtOWEyIDIgMCAwIDEtMi0ydjEtMi43YTEuMyAxLjMgMCAwIDEgLjM5LS45NGw0LjkxLTQuOTFhMS4zIDEuMyAwIDAgMSAxLjg4IDBsNC45MSA0LjkxYTEuMyAxLjMgMCAwIDEgLjM5Ljk0VjIxeiI+PC9wYXRoPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCI+PC9jaXJjbGU+PC9zdmc+" wx:if="{{activeTab !== 'profile'}}"></image>
+        <image class="tab-icon" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZTllZGY1IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTIwIDIxdjFhMiAyIDAgMCAxLTIgMmgtOWEyIDIgMCAwIDEtMi0ydjEtMi43YTEuMyAxLjMgMCAwIDEgLjM5LS45NGw0LjkxLTQuOTFhMS4zIDEuMyAwIDAgMSAxLjg4IDBsNC45MSA0LjkxYTEuMyAxLjMgMCAwIDEgLjM5Ljk0VjIxeiI+PC9wYXRoPjxjaXJjbGUgY3g9IjEyIiBjeT0iNyIgcj0iNCI+PC9jaXJjbGU+PC9zdmc+" wx:else></image>
+        <view>我的</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Modals -->
+  <!-- Login Modal -->
+  <view class="modal {{showLogin ? 'show' : ''}}">
+    <view class="modal-sheet">
+        <view class="sheet-head">
+            <view>微信授权登录</view>
+            <view class="btn secondary" bindtap="closeLogin">关闭</view>
+        </view>
+        <view class="sheet-body">
+            <view class="hint">完成授权后可使用全部功能，未认证用户需先完成校园身份认证。</view>
+            <view class="nav" style="margin-top:12px; display:flex; gap:10px;">
+                <view class="btn" style="flex:1" bindtap="doLogin">授权并登录</view>
+                <view class="btn secondary" style="flex:1" bindtap="openAuth">前往认证</view>
+            </view>
+        </view>
+    </view>
+  </view>
+
+  <!-- Auth Modal -->
+  <view class="modal {{showAuth ? 'show' : ''}}">
+    <view class="modal-sheet">
+      <view class="sheet-head">
+        <view>校园身份认证</view>
+        <view class="btn secondary" bindtap="closeAuth">关闭</view>
+      </view>
+      <view class="sheet-body">
+        <form bindsubmit="submitAuth">
+          <view class="form">
+            <view>学号</view>
+            <input name="id" class="input" placeholder="请输入学号" />
+            <view>姓名</view>
+            <input name="name" class="input" placeholder="请输入姓名" />
+            <view>校园邮箱</view>
+            <input name="mail" class="input" placeholder="name@university.edu.cn" />
+            <view class="hint">认证信息将脱敏保存。</view>
+            <button form-type="submit" class="btn" style="width:100%">提交认证</button>
+          </view>
+        </form>
+      </view>
+    </view>
+  </view>
+
+  <!-- Post Modal -->
+  <view class="modal {{showPost ? 'show' : ''}}">
+    <view class="modal-sheet">
+      <view class="sheet-head">
+        <view>发布内容</view>
+        <view class="btn secondary" bindtap="closePost">关闭</view>
+      </view>
+      <view class="sheet-body">
+        <form bindsubmit="publishPost">
+          <view class="form">
+            <view>标题</view>
+            <input name="title" class="input" placeholder="请输入标题" />
+            <view>内容</view>
+            <textarea name="content" class="input" style="height:80px" placeholder="请输入正文"></textarea>
+            <view>分类</view>
+            <view class="chips">
+              <block wx:for="{{postCategories}}" wx:key="*this">
+                <view class="chip {{postCategory === item ? 'active' : ''}}" data-cat="{{item}}" bindtap="selectPostCategory">{{item}}</view>
+              </block>
+            </view>
+            <button form-type="submit" class="btn" style="width:100%">发布到圈子</button>
+          </view>
+        </form>
+      </view>
+    </view>
+  </view>
+
+  <!-- Detail Modal -->
+  <view class="modal {{showDetail ? 'show' : ''}}">
+    <view class="modal-sheet">
+      <view class="sheet-head">
+        <view>{{detailTitle}}</view>
+        <view class="btn secondary" bindtap="closeDetail">关闭</view>
+      </view>
+      <view class="sheet-body">
+        <view class="hint detail-body">{{detailBody}}</view>
+        <image wx:if="{{detailImage}}" class="detail-image" src="{{detailImage}}" mode="widthFix"></image>
+        <view wx:if="{{detailType === 'rating'}}">
+          <scroll-view scroll-y class="reviews-scroll">
+            <block wx:for="{{detailRatingReviews}}" wx:key="index">
+              <view class="review-item">
+                <view class="item-title">{{item.user}} · {{item.stars}}分</view>
+                <view class="item-sub">{{item.reason}}</view>
+              </view>
+            </block>
+          </scroll-view>
+          <view class="btn" style="margin-top:12px;" bindtap="openRatingRequest" data-rating-id="{{detailRatingId}}">我要评分</view>
+        </view>
+        <view class="nav" style="margin-top:12px; display:flex; gap:10px;" wx:else>
+          <view class="btn" style="flex:1" bindtap="openContactFromDetail">申请联系</view>
+          <view class="btn secondary" style="flex:1" bindtap="toggleFavorite" wx:if="{{detailType === 'post'}}">{{isDetailFavorited ? '已收藏' : '收藏'}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Comments Modal -->
+  <view class="modal {{showComments ? 'show' : ''}}">
+    <view class="modal-sheet">
+      <view class="sheet-head">
+        <view>{{commentsTitle}}</view>
+        <view class="btn secondary" bindtap="closeComments">关闭</view>
+      </view>
+      <view class="sheet-body">
+        <view style="margin-bottom:10px">
+          <block wx:for="{{comments}}" wx:key="index">
+            <view class="list-item" style="padding:8px; margin-top:8px">{{item}}</view>
+          </block>
+        </view>
+        <view class="form" style="display:flex; gap:8px">
+          <input class="input" style="flex:1" placeholder="输入评论" value="{{commentInput}}" bindinput="onCommentInput" bindconfirm="sendComment"/>
+          <view class="btn" bindtap="sendComment">发布</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Goods Modal -->
+  <view class="modal {{showGoods ? 'show' : ''}}">
+    <view class="modal-sheet">
+      <view class="sheet-head">
+        <view>发布商品</view>
+        <view class="btn secondary" bindtap="closeGoods">关闭</view>
+      </view>
+      <view class="sheet-body">
+        <form bindsubmit="submitGoods">
+          <view class="form">
+            <view>商品标题</view>
+            <input name="title" class="input" placeholder="请输入标题" />
+            <view>价格</view>
+            <input name="price" class="input" placeholder="¥" />
+            <view>商品详情介绍</view>
+            <textarea name="desc" class="input" style="height:84px" placeholder="请输入商品详情介绍"></textarea>
+            <view>商品图片上传</view>
+            <view class="upload-entry" bindtap="chooseGoodsImages">上传图片（最多6张）</view>
+            <view class="image-grid">
+              <block wx:for="{{marketImages}}" wx:key="*this">
+                <view class="img-wrap">
+                  <image class="img-preview" src="{{item}}" mode="aspectFill"></image>
+                  <view class="img-remove" data-index="{{index}}" bindtap="removeGoodsImage">×</view>
+                </view>
+              </block>
+            </view>
+            <button form-type="submit" class="btn" style="width:100%">发布商品</button>
+          </view>
+        </form>
+      </view>
+    </view>
+  </view>
+
+  <!-- Runner Modal -->
+  <view class="modal {{showRunner ? 'show' : ''}}">
+    <view class="modal-sheet">
+      <view class="sheet-head">
+        <view>校园跑腿</view>
+        <view class="btn secondary" bindtap="closeRunner">关闭</view>
+      </view>
+      <view class="sheet-body">
+        <form bindsubmit="submitRunner">
+          <view class="form">
+             <view>任务类型</view>
+             <input name="taskType" class="input" placeholder="如：代取快递、代买药品、文件打印" />
+             <view class="field-row">
+               <view class="field-label">取送地点</view>
+               <input name="route" class="input field-input" placeholder="从哪里 -> 到哪里" />
+             </view>
+             <view>任务详情</view>
+             <textarea name="detail" class="input" style="height:84px" placeholder="请输入任务要求、备注等"></textarea>
+             <button form-type="submit" class="btn" style="width:100%">发布跑腿</button>
+          </view>
+        </form>
+      </view>
+    </view>
+  </view>
+
+  <!-- Map Modal -->
+  <view class="modal {{showMap ? 'show' : ''}}">
+    <view class="modal-sheet">
+      <view class="sheet-head">
+        <view>校园地图</view>
+        <view class="btn secondary" bindtap="closeMap">关闭</view>
+      </view>
+      <view class="sheet-body">
+        <view style="height:200px; background:#1b2230; display:flex; align-items:center; justify-content:center; border-radius:12px; color:gray">地图渲染区域</view>
+        <view class="form" style="margin-top:12px">
+           <input class="input" placeholder="输入目的地" value="{{routeInput}}" bindinput="onRouteInput" />
+           <view class="btn" bindtap="planRoute">规划路线</view>
+           <view class="hint">{{routeHint}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Recruit Modal -->
+  <view class="modal {{showRecruit ? 'show' : ''}}">
+    <view class="modal-sheet">
+      <view class="sheet-head">
+        <view>搭子招募</view>
+        <view class="btn secondary" bindtap="closeRecruit">关闭</view>
+      </view>
+      <view class="sheet-body">
+        <form bindsubmit="submitRecruit">
+          <view class="form">
+             <view>活动主题</view>
+             <input name="title" class="input" placeholder="请输入主题" />
+             <view>活动人数</view>
+             <input name="size" class="input" type="number" placeholder="请输入人数" />
+             <view>活动介绍</view>
+             <textarea name="intro" class="input" style="height:84px" placeholder="请输入活动介绍"></textarea>
+             <button form-type="submit" class="btn" style="width:100%">发布招募</button>
+          </view>
+        </form>
+      </view>
+    </view>
+  </view>
+  
+  <!-- Chat Room Modal -->
+  <view class="modal {{showRoom ? 'show' : ''}}">
+    <view class="modal-sheet">
+      <view class="sheet-head">
+        <view>{{roomTitle}}</view>
+        <view class="btn secondary" bindtap="closeRoom">关闭</view>
+      </view>
+      <view class="sheet-body">
+        <scroll-view scroll-y style="height:200px; margin-bottom:10px">
+          <block wx:for="{{chatMessages}}" wx:key="index">
+             <view style="margin-bottom:8px; display:flex; justify-content: {{item.isMe ? 'flex-end' : 'flex-start'}}">
+                <view style="padding:8px 12px; border-radius:12px; max-width:70%; background: {{item.isMe ? 'linear-gradient(135deg,#5e8bff,#7ef0c6)' : 'rgba(255,255,255,.08)'}}; color: {{item.isMe ? '#0d1117' : '#e9edf5'}}">
+                  <view style="font-size:11px; opacity:.8; margin-bottom:4px;">{{item.sender || (item.isMe ? roomSelfName : roomPeerName)}}</view>
+                  {{item.text}}
+                </view>
+             </view>
+          </block>
+        </scroll-view>
+        <view class="form" style="display:flex; gap:8px">
+          <input class="input" style="flex:1" placeholder="输入消息" value="{{msgInput}}" bindinput="onMsgInput" bindconfirm="sendMsg"/>
+          <view class="btn" bindtap="sendMsg">发送</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Group Modal -->
+  <view class="modal {{showGroup ? 'show' : ''}}">
+    <view class="modal-sheet">
+      <view class="sheet-head">
+        <view>创建群聊</view>
+        <view class="btn secondary" bindtap="closeGroup">关闭</view>
+      </view>
+      <view class="sheet-body">
+        <form bindsubmit="submitGroup">
+          <view class="form">
+             <view>群头像</view>
+             <view class="upload-entry" bindtap="chooseGroupAvatar">选择本地图片</view>
+             <image wx:if="{{groupAvatar}}" class="group-avatar-preview" src="{{groupAvatar}}" mode="aspectFill"></image>
+             <view>群名称</view>
+             <input name="name" class="input" placeholder="请输入群名称" />
+             <button form-type="submit" class="btn" style="width:100%">创建</button>
+          </view>
+        </form>
+      </view>
+    </view>
+  </view>
+
+  <!-- Settings Modal -->
+  <view class="modal {{showSettings ? 'show' : ''}}">
+    <view class="modal-sheet">
+      <view class="sheet-head">
+        <view>通知设置</view>
+        <view class="btn secondary" bindtap="closeSettings">关闭</view>
+      </view>
+      <view class="sheet-body">
+        <view class="list-item">
+           <view class="item-info">免打扰模式</view>
+           <switch color="#7ef0c6" checked="{{dnd}}" bindchange="onDndChange"/>
+        </view>
+        <view class="list-item" style="margin-top:10px">
+           <view class="item-info">关闭营销消息</view>
+           <switch color="#7ef0c6" checked="{{marketingOff}}" bindchange="onMarketingChange"/>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- School Modal -->
+  <view class="modal {{showSchool ? 'show' : ''}}">
+    <view class="modal-sheet">
+      <view class="sheet-head">
+        <view>切换学校</view>
+        <view class="btn secondary" bindtap="closeSchool">关闭</view>
+      </view>
+      <view class="sheet-body">
+        <view class="nav" style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px">
+            <view class="btn secondary" bindtap="chooseSchool" data-school="理工校区">理工校区</view>
+            <view class="btn secondary" bindtap="chooseSchool" data-school="东区">东区</view>
+            <view class="btn secondary" bindtap="chooseSchool" data-school="西区">西区</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Order Modal -->
+  <view class="modal {{showOrder ? 'show' : ''}}">
+    <view class="modal-sheet">
+        <view class="sheet-head">
+            <view>意向发布</view>
+            <view class="btn secondary" bindtap="closeOrder">关闭</view>
+        </view>
+        <view class="sheet-body">
+          <form bindsubmit="submitOrderIntent">
+            <view class="form">
+              <view>求购物品</view>
+              <input name="item" class="input" placeholder="例如：iPad、考研资料" />
+              <view>预算</view>
+              <input name="budget" class="input" placeholder="请输入预算" />
+              <view>需求描述</view>
+              <textarea name="desc" class="input" style="height:84px" placeholder="请描述成色、配置等要求"></textarea>
+              <button form-type="submit" class="btn" style="width:100%">发布意向</button>
+            </view>
+          </form>
+        </view>
+    </view>
+  </view>
+
+  <view class="modal {{showRatingRequest ? 'show' : ''}}">
+    <view class="modal-sheet">
+      <view class="sheet-head">
+        <view>发起评分</view>
+        <view class="btn secondary" bindtap="closeRatingRequest">关闭</view>
+      </view>
+      <view class="sheet-body">
+        <view class="form">
+          <view>评分分类（必填）</view>
+          <view class="chips">
+            <view class="chip {{ratingReqCategory === '课程' ? 'active' : ''}}" data-cat="课程" bindtap="setRatingReqCategory">课程</view>
+            <view class="chip {{ratingReqCategory === '老师' ? 'active' : ''}}" data-cat="老师" bindtap="setRatingReqCategory">老师</view>
+            <view class="chip {{ratingReqCategory === '食堂' ? 'active' : ''}}" data-cat="食堂" bindtap="setRatingReqCategory">食堂</view>
+            <view class="chip {{ratingReqCategory === '商铺' ? 'active' : ''}}" data-cat="商铺" bindtap="setRatingReqCategory">商铺</view>
+          </view>
+          <view>评分理由（必填）</view>
+          <textarea class="input" style="height:84px" placeholder="请输入评分理由" value="{{ratingReqReason}}" bindinput="onRatingReqReasonInput"></textarea>
+          <view>所打分数（必填）</view>
+          <view class="rating-stars">
+            <view class="star-chip {{ratingReqStars >= 1 ? 'on' : ''}}" data-value="1" bindtap="setRatingReqStars">1</view>
+            <view class="star-chip {{ratingReqStars >= 2 ? 'on' : ''}}" data-value="2" bindtap="setRatingReqStars">2</view>
+            <view class="star-chip {{ratingReqStars >= 3 ? 'on' : ''}}" data-value="3" bindtap="setRatingReqStars">3</view>
+            <view class="star-chip {{ratingReqStars >= 4 ? 'on' : ''}}" data-value="4" bindtap="setRatingReqStars">4</view>
+            <view class="star-chip {{ratingReqStars >= 5 ? 'on' : ''}}" data-value="5" bindtap="setRatingReqStars">5</view>
+          </view>
+          <view>资料上传（非必填）</view>
+          <view class="upload-entry" bindtap="chooseRatingFiles">上传微信聊天记录/本地文件</view>
+          <view class="hint" wx:if="{{ratingReqFiles.length}}">已选附件：{{ratingReqFiles.join('，')}}</view>
+          <view class="btn" bindtap="submitRatingRequest">提交评分</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="modal {{showMyPosts ? 'show' : ''}}">
+    <view class="modal-sheet">
+      <view class="sheet-head">
+        <view>我的发布</view>
+        <view class="btn secondary" bindtap="closeMyPosts">关闭</view>
+      </view>
+      <view class="sheet-body">
+        <view class="chips">
+          <view class="chip {{myPublishTab === '圈子' ? 'active' : ''}}" data-tab="圈子" bindtap="selectMyPublishTab">圈子帖子</view>
+          <view class="chip {{myPublishTab === '集市' ? 'active' : ''}}" data-tab="集市" bindtap="selectMyPublishTab">集市商品</view>
+          <view class="chip {{myPublishTab === '意向' ? 'active' : ''}}" data-tab="意向" bindtap="selectMyPublishTab">求购意向</view>
+        </view>
+        <view class="list" style="margin-top:10px;">
+          <block wx:if="{{myPublishTab === '圈子'}}">
+            <block wx:for="{{posts}}" wx:key="id">
+              <view class="list-item" wx:if="{{item.name.indexOf(userInfo.nickName) > -1}}">
+                <view class="item-info">
+                  <view class="item-title">{{item.content}}</view>
+                  <view class="item-sub">{{item.time}}</view>
+                </view>
+                <view class="btn secondary" data-type="post" data-id="{{item.id}}" bindtap="openMyPublishDetail">详情</view>
+                <view class="btn secondary" data-type="post" data-id="{{item.id}}" bindtap="editMyPublish">编辑</view>
+                <view class="btn secondary" data-type="post" data-id="{{item.id}}" bindtap="removeMyPublish">下架</view>
+              </view>
+            </block>
+          </block>
+          <block wx:if="{{myPublishTab === '集市'}}">
+            <block wx:for="{{marketItems}}" wx:key="id">
+              <view class="list-item" wx:if="{{item.owner.indexOf(userInfo.nickName) > -1}}">
+                <view class="item-info">
+                  <view class="item-title">{{item.title}}</view>
+                  <view class="item-sub">¥{{item.price}}</view>
+                </view>
+                <view class="btn secondary" data-type="market" data-id="{{item.id}}" bindtap="openMyPublishDetail">详情</view>
+                <view class="btn secondary" data-type="market" data-id="{{item.id}}" bindtap="editMyPublish">编辑</view>
+                <view class="btn secondary" data-type="market" data-id="{{item.id}}" bindtap="removeMyPublish">下架</view>
+              </view>
+            </block>
+          </block>
+          <block wx:if="{{myPublishTab === '意向'}}">
+            <block wx:for="{{orderIntents}}" wx:key="id">
+              <view class="list-item" wx:if="{{item.owner.indexOf(userInfo.nickName) > -1}}">
+                <view class="item-info">
+                  <view class="item-title">{{item.item}}</view>
+                  <view class="item-sub">{{item.budget}}</view>
+                </view>
+                <view class="btn secondary" data-type="intent" data-id="{{item.id}}" bindtap="openMyPublishDetail">详情</view>
+                <view class="btn secondary" data-type="intent" data-id="{{item.id}}" bindtap="editMyPublish">编辑</view>
+                <view class="btn secondary" data-type="intent" data-id="{{item.id}}" bindtap="removeMyPublish">下架</view>
+              </view>
+            </block>
+          </block>
+        </view>
+      </view>
+    </view>
+  </view>
+
+</view>

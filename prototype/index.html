@@ -1,0 +1,1272 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>知域校园 · 高保真原型</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <a href="#contentMain" class="kbd skip-link">跳到主要内容</a>
+  <div class="app">
+    <header class="header">
+      <div class="header-inner">
+        <div class="brand">
+          <div class="brand-logo"><img id="brandLogo" src="./logo.png" alt="知域校园"></div>
+          <div>知域校园</div>
+        </div>
+        <div class="search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M21 21l-4.3-4.3M4 11a7 7 0 1114 0 7 7 0 01-14 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <input id="searchInput" placeholder="搜索帖子、商品、课程资料" aria-label="搜索">
+        </div>
+        <div class="action">
+          <button id="loginBtn">微信授权</button>
+          <button id="postBtn">发布</button>
+        </div>
+      </div>
+    </header>
+
+    <div id="netBanner" class="banner" role="status">网络较弱，已降级展示内容</div>
+
+    <main id="contentMain" class="content">
+      <section id="home" data-page="home">
+        <div class="section-title">
+          <div class="badge">校园圈子</div>
+          <button class="pill white" onclick="openFilter()">筛选</button>
+        </div>
+        <div class="chips">
+          <button class="chip active" data-cat="学习互助">学习互助</button>
+          <button class="chip" data-cat="娱乐休闲">娱乐休闲</button>
+          <button class="chip" data-cat="兴趣爱好">兴趣爱好</button>
+          <button class="chip" data-cat="竞赛科研">竞赛科研</button>
+        </div>
+        <div class="toolbar">
+          <button class="btn secondary" onclick="openRunnerModal()">校园跑腿</button>
+          <button class="btn secondary" onclick="openMapModal()">校园地图</button>
+          <button class="btn secondary" onclick="openRecruitModal()">搭子招募</button>
+        </div>
+        <div class="grid" id="postGrid">
+          <div class="card" data-cat="学习互助" data-school="理工校区">
+            <div class="card-inner">
+              <div class="row">
+                <div class="avatar"></div>
+                <div>
+                  <div>计科23级 · 林同学</div>
+                  <div class="muted">1小时前 · 图书馆</div>
+                </div>
+              </div>
+              <div style="margin-top:8px">今晚求一起复习数据结构，限本校，地点在二教402。</div>
+              <div class="media"><img loading="lazy" src="https://picsum.photos/seed/campus1/820/420" alt="校园学习互助图像"></div>
+              <div class="actions">
+                <button onclick="openPostDetail('一起复习数据结构')">详情</button>
+                <button>点赞 36</button>
+                <button onclick="openComments('一起复习数据结构')">评论 8</button>
+              </div>
+            </div>
+          </div>
+          <div class="card" data-cat="兴趣爱好" data-school="东区">
+            <div class="card-inner">
+              <div class="row">
+                <div class="avatar" style="background:linear-gradient(135deg,#7ef0c6,#7aa3ff)"></div>
+                <div>
+                  <div>物理22级 · 郑同学</div>
+                  <div class="muted">3小时前 · 宿舍</div>
+                </div>
+              </div>
+              <div style="margin-top:8px">有无羽毛球搭子，周五晚体育馆三号场，限三人。</div>
+              <div class="actions">
+                <button onclick="openPostDetail('羽毛球搭子招募')">详情</button>
+                <button>点赞 18</button>
+                <button onclick="openComments('羽毛球搭子招募')">评论 3</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="grid" id="postGrid">
+          <div class="card" data-cat="娱乐休闲" data-school="西区">
+            <div class="card-inner">
+              <div class="row">
+                <div class="avatar" style="background:linear-gradient(135deg,#ffd39b,#ff9b9b)"></div>
+                <div>
+                  <div>传媒21级 · 周同学</div>
+                  <div class="muted">5小时前 · 影视厅</div>
+                </div>
+              </div>
+              <div style="margin-top:8px">周末一起观影讨论《人工智能与社会》，限5人。</div>
+              <div class="actions">
+                <button onclick="openPostDetail('观影讨论招募')">详情</button>
+                <button>点赞 22</button>
+                <button onclick="openComments('观影讨论招募')">评论 5</button>
+              </div>
+            </div>
+          </div>
+          <div class="card" data-cat="竞赛科研" data-school="理工校区">
+            <div class="card-inner">
+              <div class="row">
+                <div class="avatar" style="background:linear-gradient(135deg,#7aa3ff,#7ef0c6)"></div>
+                <div>
+                  <div>电气24级 · 唐同学</div>
+                  <div class="muted">2小时前 · 创客空间</div>
+                </div>
+              </div>
+              <div style="margin-top:8px">招募机器人竞赛队员，机械/嵌入式/算法均可。</div>
+              <div class="actions">
+                <button onclick="openPostDetail('机器人竞赛招募')">详情</button>
+                <button>点赞 41</button>
+                <button onclick="openComments('机器人竞赛招募')">评论 11</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="market" data-page="market" style="display:none">
+        <div class="section-title">
+          <div class="badge">二手集市</div>
+          <div class="pill">同校交易</div>
+        </div>
+        <div class="nav" style="margin-bottom:10px">
+          <button class="btn secondary" onclick="openGoodsModal()">发布商品</button>
+          <button class="btn secondary" onclick="openOrderIntent('二手考研资料')">下单意向</button>
+        </div>
+        <div class="list" id="marketList">
+          <div class="item" data-school="理工校区" onclick="openMarketDetail('二手考研资料','89')">
+            <div class="thumb"></div>
+            <div>
+              <div>二手考研资料全套</div>
+              <div class="muted">理工校区 · 可自提</div>
+            </div>
+            <div class="price">¥89</div>
+          </div>
+          <div class="item" data-school="理工校区" onclick="openMarketDetail('二手耳机Sony WH-1000XM4','950')">
+            <div class="thumb" style="background:linear-gradient(135deg,#7ef0c6,#7aa3ff)"></div>
+            <div>
+              <div>二手耳机 Sony WH-1000XM4</div>
+              <div class="muted">理工校区 · 可试戴</div>
+            </div>
+            <div class="price">¥950</div>
+          </div>
+          <div class="item" data-school="西区" onclick="openMarketDetail('考研数学教材套装','120')">
+            <div class="thumb" style="background:linear-gradient(135deg,#ffcf5c,#ffd39b)"></div>
+            <div>
+              <div>考研数学教材套装</div>
+              <div class="muted">西区 · 可自提</div>
+            </div>
+            <div class="price">¥120</div>
+          </div>
+          <div class="item" data-school="东区" onclick="openMarketDetail('自行车九成新','220')">
+            <div class="thumb" style="background:linear-gradient(135deg,#ff9b9b,#ffd39b)"></div>
+            <div>
+              <div>自行车九成新</div>
+              <div class="muted">东区 · 支持试骑</div>
+            </div>
+            <div class="price">¥220</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="course" data-page="course" style="display:none">
+        <div class="section-title">
+          <div class="badge">评分模块</div>
+          <div class="pill">发起评分 · 上传资料</div>
+        </div>
+        <div class="chips" style="margin-bottom:10px">
+          <button class="chip active" data-rating-cat="老师">老师</button>
+          <button class="chip" data-rating-cat="课程">课程</button>
+          <button class="chip" data-rating-cat="资料">资料</button>
+          <button class="chip" data-rating-cat="商铺">商铺</button>
+          <button class="chip" data-rating-cat="食堂">食堂</button>
+          <button class="chip" data-rating-cat="学校部门">学校部门</button>
+        </div>
+        <div class="nav" style="margin-bottom:10px">
+          <button class="btn secondary" onclick="openRatingRequest()">发起评分请求</button>
+          <button class="btn secondary" onclick="openUploadModal()">上传资料（审核后展示）</button>
+        </div>
+        <div class="list" id="ratingList">
+          <div class="item" data-cat="老师" onclick="openRatingDetail('张老师 · 数据结构','老师')">
+            <div class="thumb"></div>
+            <div>
+              <div>张老师 · 数据结构</div>
+              <div class="score">评分 4.6</div>
+              <div class="muted">课程难度适中 · 讲解清晰</div>
+            </div>
+            <div class="tag">老师</div>
+          </div>
+          <div class="item" data-cat="资料" onclick="openRatingDetail('算法期末复习提纲','资料')">
+            <div class="thumb" style="background:linear-gradient(135deg,#7aa3ff,#ffd39b)"></div>
+            <div>
+              <div>算法期末复习提纲</div>
+              <div class="score">评分 4.7</div>
+              <div class="muted">覆盖常见题型 · 讲义条理清晰</div>
+            </div>
+            <div class="tag">资料</div>
+          </div>
+          <div class="item" data-cat="食堂" onclick="openRatingDetail('南区二食堂','食堂')">
+            <div class="thumb" style="background:linear-gradient(135deg,#ff9b9b,#7ef0c6)"></div>
+            <div>
+              <div>南区二食堂</div>
+              <div class="score">评分 4.4</div>
+              <div class="muted">口味丰富 · 卫生良好 · 性价比高</div>
+            </div>
+            <div class="tag">食堂</div>
+          </div>
+          <div class="item" data-cat="学校部门" onclick="openRatingDetail('教务处服务窗口','学校部门')">
+            <div class="thumb" style="background:linear-gradient(135deg,#7aa3ff,#7ef0c6)"></div>
+            <div>
+              <div>教务处服务窗口</div>
+              <div class="score">评分 4.2</div>
+              <div class="muted">办理效率较高 · 指引清晰</div>
+            </div>
+            <div class="tag">学校部门</div>
+          </div>
+          <div class="item" data-cat="课程" onclick="openRatingDetail('高等数学A','课程')">
+            <div class="thumb" style="background:linear-gradient(135deg,#ffcf5c,#7ef0c6)"></div>
+            <div>
+              <div>高等数学A</div>
+              <div class="score">评分 4.8</div>
+              <div class="muted">资料完善 · 历年题库齐全</div>
+            </div>
+            <div class="tag">课程</div>
+          </div>
+          <div class="item" data-cat="商铺" onclick="openRatingDetail('理工校区 · 打印店','商铺')">
+            <div class="thumb" style="background:linear-gradient(135deg,#7aa3ff,#7ef0c6)"></div>
+            <div>
+              <div>理工校区 · 打印店</div>
+              <div class="score">评分 4.5</div>
+              <div class="muted">价格合理 · 排队较少</div>
+            </div>
+            <div class="tag">商铺</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="chat" data-page="chat" style="display:none">
+        <div class="section-title">
+          <div class="badge">消息</div>
+          <div class="pill">即时通讯</div>
+        </div>
+        <div class="nav" style="margin-bottom:10px">
+          <button class="btn secondary" onclick="openGroupModal()">创建群聊</button>
+          <button class="btn secondary" onclick="openSettings()">通知设置</button>
+        </div>
+        <div class="list">
+          <div class="item" onclick="openRoom('林同学')">
+            <div class="thumb"></div>
+            <div>
+              <div>林同学</div>
+              <div class="muted">今晚复习安排确认</div>
+            </div>
+            <div class="tag">未读 2</div>
+          </div>
+          <div class="item" onclick="openRoom('跑腿骑手')">
+            <div class="thumb" style="background:linear-gradient(135deg,#7aa3ff,#7ef0c6)"></div>
+            <div>
+              <div>跑腿骑手</div>
+              <div class="muted">快递代取已到校门口</div>
+            </div>
+            <div class="tag">已读</div>
+          </div>
+          <div class="item" onclick="openRoom('组队群聊 · 机器人竞赛')">
+            <div class="thumb" style="background:linear-gradient(135deg,#7ef0c6,#7aa3ff)"></div>
+            <div>
+              <div>组队群聊 · 机器人竞赛</div>
+              <div class="muted">本周任务分配与联调安排</div>
+            </div>
+            <div class="tag">新群</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="profile" data-page="profile" style="display:none">
+        <div class="card">
+          <div class="card-inner">
+            <div class="row">
+              <div class="avatar"></div>
+              <div>
+                <div id="userName">未登录用户</div>
+                <div class="muted" id="authStatus">未认证 · 限制发布交易评分</div>
+              </div>
+            </div>
+            <div class="nav" style="margin-top:12px">
+              <button class="btn secondary" id="openAuth">校园身份认证</button>
+              <button class="btn secondary" onclick="toggleTheme()">夜间模式</button>
+            </div>
+            <div class="nav" style="margin-top:10px">
+              <button class="btn secondary">我的发布</button>
+              <button class="btn secondary">设置</button>
+            </div>
+            <div class="nav" style="margin-top:10px">
+              <button class="btn secondary" onclick="openSchool()">切换学校</button>
+              <button class="btn secondary" onclick="openFaq()">FAQ/客服</button>
+            </div>
+            <div class="row" style="margin-top:10px; justify-content:space-between">
+              <div class="counter"><div class="tag">积分等级</div><div id="pointsPanel" class="level">积分 0 · Lv1</div></div>
+              <div class="counter"><div class="tag">当前学校</div><div id="schoolLabel" class="level">未选择</div></div>
+            </div>
+            <div style="margin-top:10px">
+              <div class="section-title">
+                <div>字体大小</div>
+                <div class="tag">无障碍</div>
+              </div>
+              <div class="font-size">
+                <button class="btn secondary" onclick="setFontSize(14)">小</button>
+                <button class="btn secondary" onclick="setFontSize(16)">中</button>
+                <button class="btn secondary" onclick="setFontSize(18)">大</button>
+              </div>
+            </div>
+            <div style="margin-top:12px">
+              <div class="section-title">
+                <div>兴趣标签</div>
+                <div class="tag">个性化推荐</div>
+              </div>
+              <div class="chips">
+                <button class="chip" data-int="竞技体育">竞技体育</button>
+                <button class="chip" data-int="编程开发">编程开发</button>
+                <button class="chip" data-int="音乐艺术">音乐艺术</button>
+                <button class="chip" data-int="公益志愿">公益志愿</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:12px">
+          <div class="card-inner">
+            <div class="section-title">
+              <div>平台提示</div>
+              <div class="tag">合规安全</div>
+            </div>
+            <div class="hint">内容发布需遵守校园规范，平台已接入敏感词与AI审核。</div>
+            <div style="margin-top:10px" class="row">
+              <div class="muted">免打扰</div>
+              <div id="dndSwitch" class="switch" onclick="toggleDnd()"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="tabs">
+      <div class="tabs-inner">
+        <div class="tab active" data-tab="home">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 10l9-7 9 7v10a2 2 0 01-2 2H5a2 2 0 01-2-2V10z" stroke="currentColor" stroke-width="2"/></svg>
+          <div>圈子</div>
+        </div>
+        <div class="tab" data-tab="market">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 7h16l-2 11a2 2 0 01-2 2H8a2 2 0 01-2-2L4 7zM7 7V5a3 3 0 013-3h4a3 3 0 013 3v2" stroke="currentColor" stroke-width="2"/></svg>
+          <div>集市</div>
+        </div>
+        <div class="tab" data-tab="course">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M3 7l9-4 9 4-9 4-9-4zM3 7v10l9 4 9-4V7" stroke="currentColor" stroke-width="2"/></svg>
+          <div>评分</div>
+        </div>
+        <div class="tab" data-tab="chat">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M21 15a3 3 0 01-3 3H8l-5 4V6a3 3 0 013-3h12a3 3 0 013 3v9z" stroke="currentColor" stroke-width="2"/></svg>
+          <div>消息</div>
+        </div>
+        <div class="tab" data-tab="profile">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 12a5 5 0 100-10 5 5 0 000 10zM4 21a8 8 0 0116 0" stroke="currentColor" stroke-width="2"/></svg>
+          <div>我的</div>
+        </div>
+      </div>
+    </nav>
+  </div>
+  <div class="modal" id="schoolModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div>切换学校</div>
+        <button class="btn secondary" onclick="closeSchool()">关闭</button>
+      </div>
+      <div class="sheet-body">
+        <div class="school">
+          <button class="btn secondary" onclick="chooseSchool('理工校区')">理工校区</button>
+          <button class="btn secondary" onclick="chooseSchool('东区')">东区</button>
+          <button class="btn secondary" onclick="chooseSchool('西区')">西区</button>
+        </div>
+        <div class="hint" style="margin-top:10px">不同学校数据完全隔离，仅展示本校内容与交易。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="loginModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div>微信授权登录</div>
+        <button class="btn secondary" onclick="closeLogin()">关闭</button>
+      </div>
+      <div class="sheet-body">
+        <div class="hint">完成授权后可使用全部功能，未认证用户需先完成校园身份认证。</div>
+        <div style="margin-top:12px" class="nav">
+          <button class="btn" onclick="doLogin()">授权并登录</button>
+          <button class="btn secondary" onclick="openAuthModal()">前往认证</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="authModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div>校园身份认证</div>
+        <button class="btn secondary" onclick="closeAuth()">关闭</button>
+      </div>
+      <div class="sheet-body">
+        <div class="form">
+          <label>学号</label>
+          <input id="stuId" class="input" placeholder="请输入学号">
+          <label>姓名</label>
+          <input id="realName" class="input" placeholder="请输入姓名">
+          <label>校园邮箱</label>
+          <input id="campusMail" class="input" placeholder="name@university.edu.cn">
+          <div class="hint">认证信息将脱敏保存，平台只在后台保留完整信息。</div>
+          <button class="btn" onclick="submitAuth()">提交认证</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="postModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div>发布内容</div>
+        <button class="btn secondary" onclick="closePost()">关闭</button>
+      </div>
+      <div class="sheet-body">
+        <div class="form">
+          <label>标题</label>
+          <input id="postTitle" class="input" placeholder="请输入标题">
+          <label>内容</label>
+          <textarea id="postContent" class="input" rows="4" placeholder="请输入正文"></textarea>
+          <label>分类</label>
+          <select id="postCat" class="input">
+            <option>学习互助</option>
+            <option>娱乐休闲</option>
+            <option>兴趣爱好</option>
+            <option>竞赛科研</option>
+          </select>
+          <label>时间与地点</label>
+          <input id="postMeta" class="input" placeholder="时间 · 地点 · 人数">
+          <div class="hint" id="auditHint">发布内容将进行敏感词与AI审核</div>
+          <div class="nav">
+            <button class="btn" onclick="publishPost()">发布到圈子</button>
+            <button class="btn secondary">保存草稿</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="detailModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div id="detailTitle">详情</div>
+        <button class="btn secondary" onclick="closeDetail()">关闭</button>
+      </div>
+      <div class="sheet-body" id="detailBody"></div>
+    </div>
+  </div>
+  <div class="modal" id="commentsModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div id="commentsTitle">评论</div>
+        <button class="btn secondary" onclick="closeComments()">关闭</button>
+      </div>
+      <div class="sheet-body">
+        <div class="comments" id="commentsBody">
+          <div class="comment">同学A：一起复习我也报名</div>
+          <div class="comment">同学B：周五晚上可以吗</div>
+        </div>
+        <div class="composer">
+          <input id="commentInput" class="input" placeholder="输入评论">
+          <button class="btn" onclick="sendComment()">发布</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="roomModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div id="roomTitle">对话</div>
+        <button class="btn secondary" onclick="closeRoom()">关闭</button>
+      </div>
+      <div class="sheet-body">
+        <div class="room" id="roomBody">
+          <div class="bubble">你好，请问今晚能一起复习吗</div>
+          <div class="bubble me">可以，图书馆二楼自习区见</div>
+        </div>
+        <div class="composer">
+          <input id="msgInput" class="input" placeholder="输入消息">
+          <button class="btn" onclick="sendMsg()">发送</button>
+        </div>
+        <div class="hint" id="readHint">已读回执：未读</div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="goodsModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div>发布商品</div>
+        <button class="btn secondary" onclick="closeGoods()">关闭</button>
+      </div>
+      <div class="sheet-body">
+        <div class="form">
+          <label>商品标题</label>
+          <input id="goodsTitle" class="input" placeholder="请输入标题">
+          <label>价格</label>
+          <input id="goodsPrice" class="input" placeholder="¥">
+          <label>校区与交易方式</label>
+          <input id="goodsMeta" class="input" placeholder="校区 · 面交/自提">
+          <div class="hint">同校交易，平台提供交易担保与纠纷处理</div>
+          <button class="btn" onclick="submitGoods()">发布商品</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="orderModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div>下单意向</div>
+        <button class="btn secondary" onclick="closeOrder()">关闭</button>
+      </div>
+      <div class="sheet-body" id="orderBody"></div>
+    </div>
+  </div>
+  <div class="modal" id="runnerModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div>校园跑腿下单</div>
+        <button class="btn secondary" onclick="closeRunner()">关闭</button>
+      </div>
+      <div class="sheet-body">
+        <div class="form">
+          <label>任务类型</label>
+          <select id="runnerType" class="input">
+            <option>快递代取</option>
+            <option>外卖代拿</option>
+            <option>文印取件</option>
+          </select>
+          <label>取件地点</label>
+          <input id="runnerFrom" class="input" placeholder="快递站/食堂等">
+          <label>送达地点</label>
+          <input id="runnerTo" class="input" placeholder="宿舍/教学楼等">
+          <label>时间</label>
+          <input id="runnerTime" class="input" placeholder="今天 19:00 前">
+          <label>酬金</label>
+          <input id="runnerFee" class="input" placeholder="¥">
+          <div class="hint">线下活动前将推送安全提示，规避风险；支持发布者审核骑手。</div>
+          <div class="nav">
+            <button class="btn" onclick="submitRunner()">发布跑腿</button>
+            <button class="btn secondary" onclick="openApplicants()">审核骑手</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="applicantsModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div>骑手申请列表</div>
+        <button class="btn secondary" onclick="closeApplicants()">关闭</button>
+      </div>
+      <div class="sheet-body">
+        <div class="list" id="applicantsList">
+          <div class="item">
+            <div class="thumb"></div>
+            <div>
+              <div>跑腿骑手 · A</div>
+              <div class="muted">评分 4.9 · 完成 128 单</div>
+            </div>
+            <div class="nav">
+              <button class="btn secondary" onclick="approveRider('A')">通过</button>
+              <button class="btn secondary">拒绝</button>
+            </div>
+          </div>
+          <div class="item">
+            <div class="thumb" style="background:linear-gradient(135deg,#ffcf5c,#7ef0c6)"></div>
+            <div>
+              <div>跑腿骑手 · B</div>
+              <div class="muted">评分 4.7 · 完成 98 单</div>
+            </div>
+            <div class="nav">
+              <button class="btn secondary" onclick="approveRider('B')">通过</button>
+              <button class="btn secondary">拒绝</button>
+            </div>
+          </div>
+        </div>
+        <div class="hint">审核通过后自动创建订单群聊。</div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="mapModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div>校园地图</div>
+        <button class="btn secondary" onclick="closeMap()">关闭</button>
+      </div>
+      <div class="sheet-body">
+        <div class="chips" id="mapMode">
+          <button class="chip active" data-mode="2d">2D</button>
+          <button class="chip" data-mode="3d">3D</button>
+          <button class="chip" data-mode="室内">室内楼层</button>
+          <button class="chip" data-mode="语音">语音播报</button>
+        </div>
+        <div class="chips">
+          <button class="chip active" data-place="教学楼">教学楼</button>
+          <button class="chip" data-place="图书馆">图书馆</button>
+          <button class="chip" data-place="食堂">食堂</button>
+          <button class="chip" data-place="校医院">校医院</button>
+        </div>
+        <div class="map" aria-label="校园地图展示区域">地图渲染示意（2D/3D）</div>
+        <div class="route">
+          <input id="routeInput" class="input" placeholder="输入目的地（如：二教402）" aria-label="路线目的地输入">
+          <button class="btn" onclick="planRoute()">规划最优步行路线</button>
+          <div class="hint" id="routeHint">已标注建筑开放时间、楼层指引、内部设施分布。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="recruitModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div>搭子招募</div>
+        <button class="btn secondary" onclick="closeRecruit()">关闭</button>
+      </div>
+      <div class="sheet-body">
+        <div class="form">
+          <label>活动主题</label>
+          <input id="recTitle" class="input" placeholder="请输入主题">
+          <label>场景分类</label>
+          <select id="recScene" class="input">
+            <option>学习互助</option>
+            <option>娱乐休闲</option>
+            <option>兴趣爱好</option>
+            <option>竞赛科研</option>
+          </select>
+          <label>时间与地点</label>
+          <input id="recMeta" class="input" placeholder="时间 · 地点">
+          <label>招募人数与要求</label>
+          <input id="recReq" class="input" placeholder="人数 · 要求">
+          <label>公开与审核设置</label>
+          <select id="recAudit" class="input">
+            <option>公开招募 · 无需审核</option>
+            <option>公开招募 · 需要审核</option>
+            <option>私密招募 · 需要审核</option>
+          </select>
+          <div class="nav">
+            <button class="btn" onclick="submitRecruit()">发布招募</button>
+            <button class="btn secondary" onclick="openApplicants()">审核申请</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="uploadModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div>上传资料</div>
+        <button class="btn secondary" onclick="closeUpload()">关闭</button>
+      </div>
+      <div class="sheet-body">
+        <div class="form">
+          <label>资料标题</label>
+          <input id="courseTitle" class="input" placeholder="请输入标题">
+          <label>文件类型</label>
+          <input id="courseType" class="input" placeholder="PDF/DOCX/ZIP">
+          <label>学院与版本</label>
+          <input id="courseMeta" class="input" placeholder="学院 · 版本">
+          <div class="hint">资料上传后将进行审核与评分</div>
+          <button class="btn" onclick="submitCourse()">上传</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="ratingRequestModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div>发起评分请求</div>
+        <button class="btn secondary" onclick="closeRatingRequest()">关闭</button>
+      </div>
+      <div class="sheet-body">
+        <div class="form">
+          <label>评分对象/主题</label>
+          <input id="ratingTitle" class="input" placeholder="如：张老师 · 数据结构 / 理工校区打印店">
+          <label>分类</label>
+          <select id="ratingCat" class="input">
+            <option>老师</option>
+            <option>课程</option>
+            <option>资料</option>
+            <option>商铺</option>
+            <option>食堂</option>
+            <option>学校部门</option>
+          </select>
+          <label>评分说明</label>
+          <textarea id="ratingDesc" class="input" rows="3" placeholder="说明希望大家从哪些角度进行评分（如：服务态度、口味、讲课质量）"></textarea>
+          <div class="hint">可在评分详情中上传资料，资料将通过敏感词与AI审核后展示。</div>
+          <button class="btn" onclick="submitRatingRequest()">提交评分请求</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="groupModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div>创建群聊</div>
+        <button class="btn secondary" onclick="closeGroup()">关闭</button>
+      </div>
+      <div class="sheet-body">
+        <div class="form">
+          <label>群名称</label>
+          <input id="groupName" class="input" placeholder="请输入群名称">
+          <label>成员数量</label>
+          <input id="groupSize" class="input" placeholder="例如 5">
+          <div class="hint">通过招募审核通过后自动创建小组群聊</div>
+          <button class="btn" onclick="submitGroup()">创建</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="settingsModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div>通知与隐私设置</div>
+        <button class="btn secondary" onclick="closeSettings()">关闭</button>
+      </div>
+      <div class="sheet-body">
+        <div class="row" style="justify-content:space-between">
+          <div>免打扰模式</div>
+          <div id="dndSwitch2" class="switch" onclick="toggleDnd()"></div>
+        </div>
+        <div class="row" style="justify-content:space-between; margin-top:10px">
+          <div>关闭营销类消息</div>
+          <div id="marketingSwitch" class="switch" onclick="toggleMarketing()"></div>
+        </div>
+        <div class="row" style="justify-content:space-between; margin-top:10px">
+          <div>弱网降级</div>
+          <div class="switch" onclick="toggleSlow()"></div>
+        </div>
+        <div class="hint" style="margin-top:10px">关闭推送后消息保留在消息中心，点击可查看。</div>
+      </div>
+    </div>
+  </div>
+  <div class="overlay" id="guideOverlay" role="dialog" aria-modal="true">
+    <div class="guide">
+      <div class="section-title">
+        <div>新手引导</div>
+        <div class="tag">首屏</div>
+      </div>
+      <div class="faq">
+        <div class="faq-item">1. 完成微信授权与校园认证以使用全部功能</div>
+        <div class="faq-item">2. 发布与交易需遵守校园规范与平台审核</div>
+        <div class="faq-item">3. 可在“我的”设置夜间模式与免打扰</div>
+      </div>
+      <div class="nav" style="margin-top:12px">
+        <button class="btn" onclick="closeGuide()">我已知晓</button>
+        <button class="btn secondary" onclick="openFaq()">查看FAQ</button>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="faqModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div>FAQ 与在线客服</div>
+        <button class="btn secondary" onclick="closeFaq()">关闭</button>
+      </div>
+      <div class="sheet-body">
+        <div class="faq">
+          <div class="faq-item">如何通过校园认证？使用学号、姓名、校园邮箱</div>
+          <div class="faq-item">发布内容审核未通过怎么办？根据提示修改后重试</div>
+          <div class="faq-item">交易担保与纠纷如何处理？平台介入保障双方权益</div>
+        </div>
+        <div class="nav" style="margin-top:12px">
+          <button class="btn">在线客服</button>
+          <button class="btn secondary">提交反馈</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="filterModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div>筛选条件</div>
+        <button class="btn secondary" onclick="closeFilter()">关闭</button>
+      </div>
+      <div class="sheet-body">
+        <div class="form">
+          <label>时间</label>
+          <select id="filterTime" class="input">
+            <option>全部</option>
+            <option>今天</option>
+            <option>本周</option>
+          </select>
+          <label>人数</label>
+          <select id="filterSize" class="input">
+            <option>全部</option>
+            <option>≤3</option>
+            <option>≤5</option>
+          </select>
+          <label>校区</label>
+          <select id="filterSchool" class="input">
+            <option>当前学校</option>
+            <option>全部</option>
+          </select>
+          <div class="nav">
+            <button class="btn" onclick="applyFilter()">应用</button>
+            <button class="btn secondary" onclick="recommend()">智能推荐</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="dashboardModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div>数据看板</div>
+        <button class="btn secondary" onclick="closeDashboard()">关闭</button>
+      </div>
+      <div class="sheet-body">
+        <table class="table" aria-label="数据看板">
+          <tr><th class="th">指标</th><th class="th">数值</th></tr>
+          <tr><td class="td">注册用户</td><td class="td" id="mReg">1</td></tr>
+          <tr><td class="td">已认证用户</td><td class="td" id="mAuth">0</td></tr>
+          <tr><td class="td">圈子发布量</td><td class="td" id="mPost">0</td></tr>
+          <tr><td class="td">商品发布量</td><td class="td" id="mGoods">0</td></tr>
+          <tr><td class="td">资料下载量</td><td class="td" id="mDown">0</td></tr>
+          <tr><td class="td">消息发送量</td><td class="td" id="mMsg">0</td></tr>
+        </table>
+        <div class="hint" style="margin-top:10px">漏斗：注册 → 认证 → 首次发布/下载 → 留存。</div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="logsModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div>操作日志</div>
+        <button class="btn secondary" onclick="closeLogs()">关闭</button>
+      </div>
+      <div class="sheet-body">
+        <div class="chips">
+          <button class="chip active" data-level="ALL">全部</button>
+          <button class="chip" data-level="INFO">INFO</button>
+          <button class="chip" data-level="WARN">WARN</button>
+          <button class="chip" data-level="ERROR">ERROR</button>
+        </div>
+        <div class="logs" id="logsList"></div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="sellerModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div>卖家评分与反馈</div>
+        <button class="btn secondary" onclick="closeSeller()">关闭</button>
+      </div>
+      <div class="sheet-body">
+        <div class="stars" id="sellerStars"></div>
+        <div class="composer">
+          <input id="sellerFeedback" class="input" placeholder="填写交易反馈">
+          <button class="btn" onclick="submitSellerFeedback()">提交</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal" id="activityModal">
+    <div class="modal-sheet">
+      <div class="sheet-head">
+        <div>活动反馈与成员互评</div>
+        <button class="btn secondary" onclick="closeActivity()">关闭</button>
+      </div>
+      <div class="sheet-body">
+        <div class="stars" id="memberStars"></div>
+        <div class="composer">
+          <input id="activityFeedback" class="input" placeholder="填写活动反馈与建议">
+          <button class="btn" onclick="submitActivityFeedback()">提交</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    var state = { logged: false, authed: false, name: "未登录用户", school: "", theme: "dark", interests: [], dnd: false, marketingOff: false, downloads: 0, points: 0, firstRun: true, fontSize: 16, postsCount: 0, goodsCount: 0, recruitCount: 0, runnerCount: 0, messagesCount: 0, slow: false, logs: [] };
+    function qs(s) { return document.querySelector(s); }
+    function qsa(s) { return Array.from(document.querySelectorAll(s)); }
+    function switchTab(tab) {
+      qsa('[data-page]').forEach(function(el){ el.style.display = el.getAttribute('data-page') === tab ? '' : 'none'; });
+      qsa('.tab').forEach(function(el){ el.classList.toggle('active', el.getAttribute('data-tab') === tab); });
+    }
+    qsa('.tab').forEach(function(el){ el.addEventListener('click', function(){ switchTab(el.getAttribute('data-tab')); }); });
+    qs('#loginBtn').addEventListener('click', function(){ qs('#loginModal').classList.add('show'); });
+    function closeLogin(){ qs('#loginModal').classList.remove('show'); }
+    function doLogin(){ state.logged = true; state.name = "微信用户"; state.school = "理工校区"; closeLogin(); qs('#userName').textContent = state.name; log('登录', 'INFO', '微信授权登录成功'); updateDashboard(); filterBySchool(); }
+    function openAuthModal(){ qs('#authModal').classList.add('show'); }
+    qs('#openAuth').addEventListener('click', openAuthModal);
+    function closeAuth(){ qs('#authModal').classList.remove('show'); }
+    function submitAuth(){
+      var id = qs('#stuId'), name = qs('#realName'), mail = qs('#campusMail');
+      var ok = true;
+      [id,name,mail].forEach(function(i){ i.classList.remove('error'); });
+      if (!id.value.trim()) { id.classList.add('error'); ok = false; }
+      if (!name.value.trim()) { name.classList.add('error'); ok = false; }
+      var mailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail.value.trim());
+      if (!mailOk) { mail.classList.add('error'); ok = false; }
+      if (!ok) return;
+      state.authed = true;
+      state.name = name.value.trim();
+      qs('#userName').textContent = state.name;
+      qs('#authStatus').textContent = '已认证 · 已开通全部功能';
+      log('认证', 'INFO', '校园身份认证成功');
+      updateDashboard();
+      closeAuth();
+    }
+    qs('#postBtn').addEventListener('click', function(){ qs('#postModal').classList.add('show'); });
+    function closePost(){ qs('#postModal').classList.remove('show'); }
+    var sensitiveWords = ['不良','违规','非法'];
+    function publishPost(){
+      if (!state.authed) { qs('#auditHint').textContent = '请先完成校园身份认证'; return; }
+      var title = qs('#postTitle').value.trim();
+      var content = qs('#postContent').value.trim();
+      var cat = qs('#postCat').value;
+      var meta = qs('#postMeta').value.trim();
+      if (!title || !content) { qs('#auditHint').textContent = '标题与内容为必填'; return; }
+      var hit = sensitiveWords.find(function(w){ return content.includes(w); });
+      if (hit) { qs('#auditHint').textContent = '审核失败：包含敏感词 "'+hit+'"，请修改后重试'; return; }
+      var pass = Math.random() > 0.2;
+      if (!pass) { qs('#auditHint').textContent = 'AI审核未通过：内容风险较高，请优化表述后重试'; return; }
+      qs('#auditHint').textContent = '已发布到圈子（'+cat+'） · '+meta;
+      state.postsCount += 1;
+      log('圈子发布', 'INFO', title);
+      updateDashboard();
+      addPoints(5);
+    }
+    function openPostDetail(title){
+      qs('#detailTitle').textContent = title;
+      qs('#detailBody').innerHTML = '<div class="hint">活动时间：周五 19:00 · 地点：体育馆三号场 · 人数：3</div><div class="nav" style="margin-top:12px"><button class="btn">申请加入</button><button class="btn secondary">收藏</button></div>';
+      qs('#detailModal').classList.add('show');
+    }
+    function openComments(title){
+      qs('#commentsTitle').textContent = title+' · 评论';
+      qs('#commentsModal').classList.add('show');
+    }
+    function closeComments(){ qs('#commentsModal').classList.remove('show'); }
+    function sendComment(){
+      var v = qs('#commentInput').value.trim();
+      if (!v) return;
+      var c = document.createElement('div');
+      c.className = 'comment';
+      c.textContent = '我：'+v;
+      qs('#commentsBody').appendChild(c);
+      qs('#commentInput').value = '';
+    }
+    function openMarketDetail(title, price){
+      qs('#detailTitle').textContent = title;
+      qs('#detailBody').innerHTML = '<div class="hint">商品价格：¥'+price+' · 交易方式：同校面交</div><div class="nav" style="margin-top:12px"><button class="btn">联系卖家</button><button class="btn secondary">加入心愿单</button></div>';
+      qs('#detailModal').classList.add('show');
+    }
+    function openGoodsModal(){ qs('#goodsModal').classList.add('show'); }
+    function closeGoods(){ qs('#goodsModal').classList.remove('show'); }
+    function submitGoods(){
+      if (!state.authed) return alert('请先完成校园身份认证');
+      var t = qs('#goodsTitle').value.trim();
+      var p = qs('#goodsPrice').value.trim();
+      var m = qs('#goodsMeta').value.trim();
+      if (!t || !p) return alert('请输入标题与价格');
+      alert('商品已发布：'+t+' · ¥'+p+' · '+m);
+      state.goodsCount += 1;
+      log('集市发布', 'INFO', t);
+      updateDashboard();
+      addPoints(5);
+      closeGoods();
+    }
+    function openOrderIntent(title){
+      var schoolOk = !!state.school;
+      var msg = schoolOk ? '平台已开启交易担保，双方同校，支持面交与纠纷处理。' : '请先完成校园认证以确认同校交易。';
+      qs('#orderBody').innerHTML = '<div class="hint">'+msg+'</div><div class="nav" style="margin-top:12px"><button class="btn">发起沟通</button><button class="btn secondary" onclick="closeOrder()">取消</button></div>';
+      qs('#orderModal').classList.add('show');
+    }
+    function closeOrder(){ qs('#orderModal').classList.remove('show'); }
+    function openRatingDetail(title, cat){
+      qs('#detailTitle').textContent = title+' · '+cat+'评分';
+      qs('#detailBody').innerHTML = '<div class="hint">为 '+cat+' 进行评分与介绍说明，支持上传审核后的资料以佐证评分。</div><div class="stars" id="starsWrap"></div><div class="form" style="margin-top:12px"><label>评分介绍</label><textarea id="ratingIntro" class="input" rows="3" placeholder="填写对该 '+cat+' 的评价与说明"></textarea></div><div class="nav" style="margin-top:12px"><button class="btn" onclick="submitRating()">提交评分</button><button class="btn secondary" onclick="openUploadModal()">上传资料</button></div>';
+      qs('#detailModal').classList.add('show');
+      var w = qs('#starsWrap'); w.innerHTML = '';
+      for (var i=1;i<=5;i++){ var s = document.createElement('div'); s.className='star'+(i<=4?' on':''); (function(n){ s.addEventListener('click', function(){ setRating(n); }); })(i); w.appendChild(s); }
+    }
+    function setRating(n){ var t = qs('#courseRating'); if (t) t.textContent = n; qsa('#starsWrap .star').forEach(function(el,idx){ el.classList.toggle('on', idx < n); }); }
+    function submitRating(){
+      if (!state.authed) return alert('请先完成校园身份认证');
+      var intro = qs('#ratingIntro').value.trim();
+      if (!intro) return alert('请填写评分介绍');
+      log('评分提交', 'INFO', intro);
+      alert('评分已提交并记录');
+      closeDetail();
+    }
+    function downloadCourse(){ state.downloads += 1; alert('开始下载 · 累计下载 '+state.downloads); addPoints(2); updateDashboard(); log('下载', 'INFO', '资料下载'); }
+    function closeDetail(){ qs('#detailModal').classList.remove('show'); }
+    function openRoom(name){
+      qs('#roomTitle').textContent = name;
+      qs('#roomModal').classList.add('show');
+    }
+    function closeRoom(){ qs('#roomModal').classList.remove('show'); }
+    function sendMsg(){
+      var v = qs('#msgInput').value.trim();
+      if (!v) return;
+      var b = document.createElement('div');
+      b.className = 'bubble me';
+      b.textContent = v;
+      qs('#roomBody').appendChild(b);
+      qs('#msgInput').value = '';
+      setTimeout(function(){ qs('#readHint').textContent = '已读回执：已读'; }, 800);
+      state.messagesCount += 1; updateDashboard(); log('消息', 'DEBUG', '发送消息');
+    }
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' && document.activeElement === qs('#msgInput')) sendMsg();
+    });
+    function openUploadModal(){ qs('#uploadModal').classList.add('show'); }
+    function closeUpload(){ qs('#uploadModal').classList.remove('show'); }
+    function submitCourse(){
+      if (!state.authed) return alert('请先完成校园身份认证');
+      var t = qs('#courseTitle').value.trim();
+      var ty = qs('#courseType').value.trim();
+      var m = qs('#courseMeta').value.trim();
+      if (!t || !ty) return alert('请输入标题与类型');
+      alert('资料已上传：'+t+' · '+ty+' · '+m);
+      addPoints(3);
+      log('资料上传', 'INFO', t);
+      updateDashboard();
+      closeUpload();
+    }
+    function openGroupModal(){ qs('#groupModal').classList.add('show'); }
+    function closeGroup(){ qs('#groupModal').classList.remove('show'); }
+    function submitGroup(){
+      var name = qs('#groupName').value.trim();
+      var size = qs('#groupSize').value.trim();
+      if (!name || !size) return;
+      var list = document.querySelector('#chat .list');
+      var item = document.createElement('div'); item.className='item'; item.onclick=function(){ openRoom(name); };
+      item.innerHTML = '<div class="thumb" style="background:linear-gradient(135deg,#7ef0c6,#7aa3ff)"></div><div><div>'+name+'</div><div class="muted">群成员 '+size+' 人</div></div><div class="tag">新群</div>';
+      list.insertBefore(item, list.firstChild);
+      closeGroup();
+    }
+    function toggleTheme(){
+      var body = document.body;
+      if (state.theme === 'dark') { body.classList.add('light'); state.theme = 'light'; }
+      else { body.classList.remove('light'); state.theme = 'dark'; }
+    }
+    function toggleDnd(){
+      state.dnd = !state.dnd;
+      ['#dndSwitch','#dndSwitch2'].forEach(function(sel){ var el = qs(sel); if (el) el.classList.toggle('on', state.dnd); });
+    }
+    function openSettings(){ qs('#settingsModal').classList.add('show'); }
+    function closeSettings(){ qs('#settingsModal').classList.remove('show'); }
+    function toggleMarketing(){ state.marketingOff = !state.marketingOff; qs('#marketingSwitch').classList.toggle('on', state.marketingOff); }
+    qsa('#profile .chips .chip').forEach(function(el){
+      el.addEventListener('click', function(){
+        var tag = el.getAttribute('data-int');
+        var on = el.classList.toggle('active');
+        if (on) state.interests.push(tag); else state.interests = state.interests.filter(function(x){ return x !== tag; });
+        addPoints(1);
+      });
+    });
+    qsa('#home .chips .chip').forEach(function(el){
+      el.addEventListener('click', function(){
+        qsa('#home .chips .chip').forEach(function(b){ b.classList.remove('active'); });
+        el.classList.add('active');
+        applyCategory(el.getAttribute('data-cat'));
+      });
+    });
+    function openFilter(){ qs('#filterModal').classList.add('show'); }
+    function closeFilter(){ qs('#filterModal').classList.remove('show'); }
+    function applyFilter(){ closeFilter(); filterBySchool(); }
+    function applyCategory(cat){ qsa('#postGrid .card').forEach(function(c){ c.style.display = c.getAttribute('data-cat') === cat ? '' : 'none'; }); recommend(); }
+    function recommend(){
+      var int = state.interests;
+      qsa('#postGrid .card').forEach(function(c){
+        var text = c.querySelector('.card-inner div:nth-child(4)').textContent;
+        var isFav = int.some(function(tag){ return text.includes(tag) || c.getAttribute('data-cat').includes(tag); });
+        c.style.order = isFav ? -1 : 0;
+      });
+    }
+    function filterBySchool(){
+      if (!state.school) return;
+      ['#postGrid .card', '#marketList .item', '#ratingList .item'].forEach(function(sel){
+        qsa(sel).forEach(function(el){ var s = el.getAttribute('data-school'); el.style.display = (!s || s === state.school) ? '' : 'none'; });
+      });
+    }
+    function openRatingRequest(){ qs('#ratingRequestModal').classList.add('show'); }
+    function closeRatingRequest(){ qs('#ratingRequestModal').classList.remove('show'); }
+    function submitRatingRequest(){
+      if (!state.authed) return alert('请先完成校园身份认证');
+      var title = qs('#ratingTitle').value.trim();
+      var cat = qs('#ratingCat').value;
+      var desc = qs('#ratingDesc').value.trim();
+      if (!title || !desc) return alert('请完善评分对象与说明');
+      var hit = sensitiveWords.find(function(w){ return desc.includes(w); });
+      if (hit) return alert('审核失败：包含敏感词 "'+hit+'"');
+      log('评分请求', 'INFO', title+' · '+cat);
+      addPoints(3);
+      var list = qs('#ratingList');
+      var item = document.createElement('div');
+      item.className = 'item'; item.setAttribute('data-cat', cat);
+      item.onclick = function(){ openRatingDetail(title, cat); };
+      item.innerHTML = '<div class="thumb"></div><div><div>'+title+'</div><div class="muted">用户发起 · 待评分</div></div><div class="tag">'+cat+'</div>';
+      list.insertBefore(item, list.firstChild);
+      closeRatingRequest();
+    }
+    qsa('#course .chips .chip').forEach(function(el){
+      el.addEventListener('click', function(){
+        qsa('#course .chips .chip').forEach(function(b){ b.classList.remove('active'); });
+        el.classList.add('active');
+        var cat = el.getAttribute('data-rating-cat');
+        qsa('#ratingList .item').forEach(function(i){ i.style.display = i.getAttribute('data-cat') === cat ? '' : 'none'; });
+      });
+    });
+    function openSeller(){ qs('#sellerModal').classList.add('show'); buildStars('sellerStars', 4, setSellerRating); }
+    function closeSeller(){ qs('#sellerModal').classList.remove('show'); }
+    function setSellerRating(n){ }
+    function submitSellerFeedback(){
+      var fb = qs('#sellerFeedback').value.trim();
+      if (!fb) return;
+      log('交易评价', 'INFO', fb);
+      alert('已提交卖家评分与反馈');
+      closeSeller();
+    }
+    function openActivity(){ qs('#activityModal').classList.add('show'); buildStars('memberStars', 4, setMemberRating); }
+    function closeActivity(){ qs('#activityModal').classList.remove('show'); }
+    function setMemberRating(n){ }
+    function submitActivityFeedback(){
+      var fb = qs('#activityFeedback').value.trim();
+      if (!fb) return;
+      log('活动反馈', 'INFO', fb);
+      alert('已提交活动反馈与互评');
+      closeActivity();
+    }
+    function buildStars(id, value, cb){
+      var w = qs('#'+id); w.innerHTML = '';
+      for (var i=1;i<=5;i++){ var s = document.createElement('div'); s.className='star'+(i<=value?' on':''); (function(n){ s.addEventListener('click', function(){ cb(n); }); })(i); w.appendChild(s); }
+    }
+    function openDashboard(){ updateDashboard(); qs('#dashboardModal').classList.add('show'); }
+    function closeDashboard(){ qs('#dashboardModal').classList.remove('show'); }
+    function updateDashboard(){
+      qs('#mReg').textContent = state.logged ? 1 : 0;
+      qs('#mAuth').textContent = state.authed ? 1 : 0;
+      qs('#mPost').textContent = state.postsCount;
+      qs('#mGoods').textContent = state.goodsCount;
+      qs('#mDown').textContent = state.downloads;
+      qs('#mMsg').textContent = state.messagesCount;
+    }
+    function openLogs(){ refreshLogs(); qs('#logsModal').classList.add('show'); }
+    function closeLogs(){ qs('#logsModal').classList.remove('show'); }
+    function log(type, level, msg){ state.logs.push({ type: type, level: level, msg: msg, ts: new Date().toLocaleTimeString() }); }
+    function refreshLogs(level){
+      var target = qs('#logsList'); target.innerHTML = '';
+      var items = state.logs.filter(function(l){ return !level || level === 'ALL' || l.level === level; });
+      items.forEach(function(l){
+        var div = document.createElement('div'); div.className='log '+l.level;
+        div.innerHTML = '<div class="level">'+l.level+' · '+l.ts+'</div><div>'+l.type+' · '+l.msg+'</div>';
+        target.appendChild(div);
+      });
+    }
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' && document.activeElement === qs('#msgInput')) sendMsg();
+    });
+    qsa('#logsModal .chips .chip').forEach(function(el){
+      el.addEventListener('click', function(){
+        qsa('#logsModal .chips .chip').forEach(function(b){ b.classList.remove('active'); });
+        el.classList.add('active');
+        refreshLogs(el.getAttribute('data-level'));
+      });
+    });
+    function addPoints(n){
+      state.points += n;
+      var level = state.points >= 100 ? 'Lv3' : state.points >= 50 ? 'Lv2' : 'Lv1';
+      var panel = document.getElementById('pointsPanel');
+      if (panel) panel.textContent = '积分 '+state.points+' · '+level;
+    }
+    function openRunnerModal(){ qs('#runnerModal').classList.add('show'); }
+    function closeRunner(){ qs('#runnerModal').classList.remove('show'); }
+    function submitRunner(){
+      if (!state.authed) return alert('请先完成校园身份认证');
+      var t = qs('#runnerType').value, f = qs('#runnerFrom').value.trim(), to = qs('#runnerTo').value.trim(), time = qs('#runnerTime').value.trim(), fee = qs('#runnerFee').value.trim();
+      if (!f || !to || !fee) return alert('请完善取送地点与酬金');
+      alert('跑腿任务已发布：'+t+' · '+f+' → '+to+' · '+time+' · ¥'+fee);
+      addPoints(4);
+      closeRunner();
+    }
+    function openApplicants(){ qs('#applicantsModal').classList.add('show'); }
+    function closeApplicants(){ qs('#applicantsModal').classList.remove('show'); }
+    function approveRider(name){
+      submitGroupName('订单群聊 · '+name, 3);
+      alert('已通过骑手 '+name+' · 已创建订单群聊');
+    }
+    function submitGroupName(name, size){
+      var list = document.querySelector('#chat .list');
+      var item = document.createElement('div'); item.className='item'; item.onclick=function(){ openRoom(name); };
+      item.innerHTML = '<div class="thumb" style="background:linear-gradient(135deg,#7ef0c6,#7aa3ff)"></div><div><div>'+name+'</div><div class="muted">群成员 '+size+' 人</div></div><div class="tag">新群</div>';
+      list.insertBefore(item, list.firstChild);
+    }
+    function openMapModal(){ qs('#mapModal').classList.add('show'); }
+    function closeMap(){ qs('#mapModal').classList.remove('show'); }
+    function planRoute(){
+      var dest = qs('#routeInput').value.trim();
+      if (!dest) return;
+      qs('#routeHint').textContent = '已为您规划到 '+dest+' 的最优步行路线 · 预计 8 分钟';
+    }
+    function openRecruitModal(){ qs('#recruitModal').classList.add('show'); }
+    function closeRecruit(){ qs('#recruitModal').classList.remove('show'); }
+    function submitRecruit(){
+      if (!state.authed) return alert('请先完成校园身份认证');
+      var t = qs('#recTitle').value.trim();
+      var s = qs('#recScene').value;
+      var m = qs('#recMeta').value.trim();
+      var r = qs('#recReq').value.trim();
+      var a = qs('#recAudit').value;
+      if (!t || !m || !r) return alert('请完善主题、时间地点与招募要求');
+      alert('招募已发布：'+t+' · '+s+' · '+m+' · '+r+' · '+a);
+      addPoints(4);
+      closeRecruit();
+    }
+    function closeGuide(){ state.firstRun = false; qs('#guideOverlay').classList.remove('show'); }
+    function openFaq(){ qs('#faqModal').classList.add('show'); }
+    function closeFaq(){ qs('#faqModal').classList.remove('show'); }
+    function openSchool(){ qs('#schoolModal').classList.add('show'); }
+    function closeSchool(){ qs('#schoolModal').classList.remove('show'); }
+    function chooseSchool(s){
+      state.school = s;
+      qs('#schoolLabel').textContent = s;
+      filterBySchool();
+      log('学校切换', 'INFO', s);
+      closeSchool();
+    }
+    function setFontSize(size){
+      state.fontSize = size;
+      document.documentElement.style.fontSize = size+'px';
+    }
+    window.addEventListener('load', function(){
+      if (state.firstRun) qs('#guideOverlay').classList.add('show');
+      keyboardTabs();
+      loadLogo();
+    });
+    function keyboardTabs(){
+      var idx = 0;
+      var tabs = qsa('.tab');
+      tabs.forEach(function(t, i){ t.setAttribute('tabindex','0'); t.addEventListener('keydown', function(e){ if (e.key === 'ArrowRight') { idx = Math.min(idx+1, tabs.length-1); tabs[idx].focus(); } else if (e.key === 'ArrowLeft') { idx = Math.max(idx-1, 0); tabs[idx].focus(); } else if (e.key === 'Enter') { tabs[idx].click(); } }); });
+    }
+    function toggleSlow(){ state.slow = !state.slow; qs('#netBanner').classList.toggle('show', state.slow); }
+    function loadLogo(){
+      var img = qs('#brandLogo');
+      if (!img) return;
+      var paths = ['./logo.png','./logo.jpg','./logo.jpeg','./logo.svg','/logo.png'];
+      var i = 0;
+      function tryNext(){
+        if (i >= paths.length) { img.style.display = 'none'; return; }
+        var p = paths[i++];
+        var test = new Image();
+        test.onload = function(){ img.src = p; img.style.display = 'block'; };
+        test.onerror = tryNext;
+        test.src = p;
+      }
+      tryNext();
+    }
+  </script>
+</body>
+</html>

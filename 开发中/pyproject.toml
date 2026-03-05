@@ -1,0 +1,42 @@
+[tool.poetry]
+name = "zhiyu-campus-platform"
+version = "0.1.0"
+description = "知域校园互动社交平台后端服务"
+authors = ["Zhiyu Team"]
+readme = "README.md"
+packages = [{include = "app"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.109.0"
+uvicorn = {extras = ["standard"], version = "^0.27.0"}
+pydantic = "^2.5.0"
+pydantic-settings = "^2.1.0"
+structlog = "^24.1.0"
+python-dotenv = "^1.0.0"
+# 数据库驱动
+sqlalchemy = "^2.0.25"
+asyncmy = "^0.2.9"
+motor = "^3.3.2"
+redis = {extras = ["hiredis"], version = "^5.0.1"}
+alembic = "^1.13.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.0"
+pytest-asyncio = "^0.23.0"
+httpx = "^0.26.0"
+black = "^24.1.0"
+ruff = "^0.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 100
+target-version = ['py311']
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+select = ["E", "F", "I", "N", "W"]

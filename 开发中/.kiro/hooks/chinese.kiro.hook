@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "enabled": true,
+  "name": "chinese",
+  "description": "Regardless of the language the customer uses, or how they ask for information or keywords, you must always respond in Chinese.\n",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Regardless of the language the customer uses, or how they ask for information or keywords, you must always respond in Chinese."
+  }
+}
